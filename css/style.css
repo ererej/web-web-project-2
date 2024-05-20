@@ -1,0 +1,121 @@
+body {
+    margin: 0;
+}
+
+body::-webkit-scrollbar {
+    display: none;
+  }
+  
+:root {
+    --light-blue: #328eff;
+    --darker-blue: #0e5eff;
+}
+
+a {
+    text-decoration: none;
+    font-weight: bold;
+}
+
+#navbar-logo {
+    height: 5%;
+    aspect-ratio: 1/1;
+}
+
+
+.navbar {
+    display: flex;
+    padding: 13px 0 3px;
+    margin: 0 10%;
+    justify-content:space-around;
+}
+
+.navbar-button {
+    color: #000;
+    font-size:x-large;
+    text-align: center;
+    padding: 10px 50px;
+    transition-property: background-color;
+    transition-duration: 0.25s;
+    background-color: var(--light-blue);
+} 
+#active-page {
+    background-color: var(--darker-blue);
+}
+
+
+.navbar-button:hover {
+    background-color: var(--darker-blue);
+}
+
+
+.line {
+    width: 90%;
+    height: 5px;
+    background-color: #000;
+    margin: 2.5% 5%;
+    border-radius: 2.5px;
+}
+
+
+#item-picker {
+    display: inline-flex;
+    background-color: #009efa;
+    width: 12vw;
+    height: 80vh;
+    margin: 2%;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    overflow-y: hidden;
+}
+
+#drawing-area {
+    display: inline-grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-areas: ". . . . . . . . ." ". . . . . . . . ." ". . . . . . . . ." ". . . . . . . . .";
+    background-color: whitesmoke;
+    width: 78vw;
+    height: 65vh;
+    margin: 0;
+    border: gray 2px solid;
+}
+
+.item-spawner {
+    display: inline-flex;
+    background-color: #fa0000;
+    width: 10vh;
+    height: 10vh;
+    cursor: pointer;
+}
+
+.buttons {
+    background-color: #00ff00;
+    width: 20vh;
+    height: 5vh;
+    text-align: center;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.buttons:hover {
+    background-color: #2fff00;
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+
+.saves {
+    display: none;
+    position: absolute;
+    background-color: #f1f1f1;
+    min-width: 160px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+
+.show {display:block;}

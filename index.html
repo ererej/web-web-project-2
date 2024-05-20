@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 2</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <div class="navbar-button" id="active-page"><a>Saved Rooms</a></div>
+            <a href="#" class="navbar-button">
+                <div>
+                    Saved Seating Plans
+                </div>
+            </a>
+            <a href="#" class="navbar-button" href>
+                <div>
+                    Saved Classes
+                </div> 
+            </a>
+        </div>
+        <div class="line"></div>
+
+    </header> 
+    <main>
+        <div id="item-picker">
+            <div class="item-spawner" id="test-item" style="background-color: red;">test</div>
+            <div class="item-spawner" id="test-item2" style="background-color: blue;">test2</div>
+            <button onclick="showSaves()" id="loadButton" class="buttons">Load Seatings</button>
+            <button id="saveButton" class="buttons">Save</button>
+        </div>
+        <div id="drawing-area">
+            <!-- <div style="grid-column-start: 1; grid-row-start: 1;  background-color: aqua;">hej</div> -->
+            <!-- <div style="grid-column-start: 2; grid-row-start: 2;  background-color: rgb(7, 6, 109);">hej</div> -->
+        </div>
+    </main>
+    <footer></footer>
+</body>
+<script src="index.js"></script>
+</html>
