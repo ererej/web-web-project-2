@@ -89,6 +89,11 @@ a {
     cursor: pointer;
 }
 
+.seat {
+    text-align: center;
+    top: 50%;
+}
+
 .buttons {
     background-color: #00ff00;
     width: 20vh;
@@ -104,18 +109,22 @@ a {
     background-color: #2fff00;
 }
 
-.dropdown {
+.saves-dropdown {
     position: relative;
     display: inline-block;
 }
 
-.saves {
+.saves-dropdown-content {
     display: none;
-    position: absolute;
-    background-color: #f1f1f1;
-    min-width: 160px;
+    position: static;
+    background-color: #e40303;
+    border: 1px solid #000;
+    min-width: 100px;
+    min-height: 30px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
     z-index: 1;
 }
 
-.show {display:block;}
+.show {
+    display: block;
+}
