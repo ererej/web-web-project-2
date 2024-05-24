@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 2</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="index.html" class="navbar-button"><div>Saved Rooms</div></a>
+            <a href="#" class="navbar-button"><div>Saved Seating Plans</div></a>
+            <a href="classes.html" class="navbar-button"><div>Saved Classes</div> </a>
+        </div>
+        <div class="line"></div>
+
+    </header> 
+    <main>
+    <div id="saved-classes-container">
+        <button id="new-class" class="buttons">New Class</button>
+    </div>
+    <div id="create-class-form-conatiner">
+        <form id="create-class-form">
+            <label for="class-name">Class Name:</label>
+            <input type="text" id="class-name" name="class-name" required="true" placeholder="Te22A" >
+            <br>
+            <label for="students">Student Names:</label>
+            <br>
+            <textarea type="text" id="students" name="students" required="true" cols="90%" rows="20" placeholder="separate the students with a comma or line break"></textarea>
+            <br>
+            <button type="submit" id="submit-class" class="buttons">Save</button>
+            <button id="delete-class" class="buttons">Delete</button>
+        </form>
+    </div>
+    </main>
+    <footer></footer>
+</body>
+<script src="cookies.js"></script>
+<script src="saved_classes.js"></script>
+</html>

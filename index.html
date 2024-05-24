@@ -9,35 +9,37 @@
 <body>
     <header>
         <div class="navbar">
-            <div class="navbar-button" id="active-page"><a>Saved Rooms</a></div>
-            <a href="#" class="navbar-button">
-                <div>
-                    Saved Seating Plans
-                </div>
-            </a>
-            <a href="#" class="navbar-button" href>
-                <div>
-                    Saved Classes
-                </div> 
-            </a>
+            <a href="index.html" class="navbar-button"><div>Saved Rooms</div></a>
+            <a href="#" class="navbar-button"><div>Saved Seating Plans</div></a>
+            <a href="classes.html" class="navbar-button"><div>Saved Classes</div> </a>
         </div>
         <div class="line"></div>
-
     </header> 
     <main>
         <div id="item-picker">
-            <div class="item-spawner" id="test-item" style="background-color: red;">test</div>
-            <div class="item-spawner" id="test-item2" style="background-color: blue;">test2</div>
+            <div class="item-spawner" id="test-item" style="background-color: red;">Seat</div>
+            <div class="item-spawner" id="test-item2" style="background-color: blue;">Teachers desc</div>
             <button onclick="showSaves()" id="loadButton" class="buttons">Load Seatings</button>
             <div id="saves-dropdown" class="saves-dropdown-content"></div>
             <button id="saveButton" class="buttons">Save</button>
         </div>
+        <div id="right-side">
+            <div>
+                <label for="room-name">Room Name:</label>
+                <input type="text" id="room-name">
+                <label for="columns">Colums</label>
+                <input id="columns" type="number" min="1" max="100" value="9" step="1">
+                <label for="rows">Rows</label>
+                <input id="rows" type="number" min="1" max="100" value="5" step="1">
+            </div>
         <div id="drawing-area">
             <!-- <div style="grid-column-start: 1; grid-row-start: 1;  background-color: aqua;">hej</div> -->
             <!-- <div style="grid-column-start: 2; grid-row-start: 2;  background-color: rgb(7, 6, 109);">hej</div> -->
         </div>
+    </div>
     </main>
     <footer></footer>
 </body>
+<script src="cookies.js"></script>
 <script src="index.js"></script>
 </html>

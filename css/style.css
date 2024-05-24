@@ -69,15 +69,29 @@ a {
     overflow-y: hidden;
 }
 
+#right-side {
+    display: inline-flex;
+    width: 78vw;
+    height: 80vh;
+    margin: 2%;
+    align-items: left;
+    flex-direction: column;
+}
+
+label,input {
+    width: 10%;
+    display: inline;
+}
+
 #drawing-area {
-    display: inline-grid;
+    display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr;
+    grid-template-rows: 1fr 1fr 1fr 1fr 1fr ;
     grid-template-areas: ". . . . . . . . ." ". . . . . . . . ." ". . . . . . . . ." ". . . . . . . . .";
     background-color: whitesmoke;
     width: 78vw;
     height: 65vh;
-    margin: 0;
+    margin: 1.5%;
     border: gray 2px solid;
 }
 
@@ -89,9 +103,13 @@ a {
     cursor: pointer;
 }
 
+.ghost-item {
+    display: absolute;
+}
+
 .seat {
     text-align: center;
-    top: 50%;
+    padding: 20% 0;
 }
 
 .buttons {
@@ -127,4 +145,35 @@ a {
 
 .show {
     display: block;
+}
+
+
+#saved-classes-container {
+    display: inline-flex;
+    flex-direction: column;
+    background-color: #009efa;
+    /* width: 20vh; */
+    height: 75vh;
+    margin: 0 7%;
+    cursor: pointer;
+}
+
+#create-class-form-conatiner {
+    background-color: red;
+    display: inline-flex;
+    flex-direction: column;
+    width: 50%;
+    height: 100%;
+    overflow-y: auto;
+    align-items: left;
+}
+
+#create-class-form > * {
+    margin: 10px;
+    ;
+}
+
+#delete-class {
+    background-color: #fa0000;
+    display: none;
 }

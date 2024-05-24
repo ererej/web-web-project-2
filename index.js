@@ -1,41 +1,18 @@
 let life = 52;
 const itemspawners = document.getElementsByClassName("item-spawner")
 const drawingArea = document.getElementById("drawing-area")
-const rows = 5
-const columns = 9
+let rows = 5
+let columns = 9
 const gridheight = 65/rows
 const gridWidth = 78/columns
 const grid = []
 
-// taken from stakoverflow
-function setCookie(name, value, days) {
-    var expires;
-    if (days) {
-        var date = new Date();
-        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
-        expires = "; expires=" + date.toGMTString();
-    }
-    else {
-        expires = "";
-    }
-    document.cookie = name + "=" + value + expires + "; path=/";
-}
-// taken from w3schools
-function getCookie(cname) {
-    let name = cname + "=";
-    let decodedCookie = decodeURIComponent(document.cookie);
-    let ca = decodedCookie.split(';');
-    for(let i = 0; i <ca.length; i++) {
-      let c = ca[i];
-      while (c.charAt(0) == ' ') {
-        c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-        return c.substring(name.length, c.length);
-      }
-    }
-    return "";
-}
+const columnsInput = document.getElementById("columns")
+columnsInput.addEventListener("change", function() {
+    columns = columnsInput.value
+    drawingArea.gridTemplateColumns = `repeat(${columns}, 1fr)`
+    drawingArea.gridTemplateRows = `repeat(${rows}, 1fr)`
+})
 
 const addLoadButton = (saveName) => {
     const dropDown = document.getElementById("saves-dropdown")
@@ -46,11 +23,18 @@ const addLoadButton = (saveName) => {
     element.innerHTML = saveName
     dropDown.appendChild(element)
     element.addEventListener("click", function() {
-        const grid = JSON.parse(getCookie("seatingPlans"))[saveName]
-        for (let i=0; i<9; i++) {
-            for (let j=0; j<5; j++) {
+        const grid = JSON.parse(getCookie("seatingPlans"))[saveName].grid
+        rows = JSON.parse(getCookie("seatingPlans"))[saveName].layout.rows
+        columns = JSON.parse(getCookie("seatingPlans"))[saveName].layout.columns
+        for (let i=0; i<columns; i++) {
+            for (let j=0; j<rows; j++) {
                     drawingArea.childNodes.forEach(async (element) => {
                         if (element.style.gridColumnStart == i+1 && element.style.gridRowStart == j+1) {
+                            if (grid[i][j][0] == null) {
+                                element.style.backgroundColor = "white"
+                                element.innerHTML = ""
+                                return 
+                            }
                             element.style.backgroundColor = grid[i][j][0].color
                             element.innerHTML = grid[i][j][1]
                             element.classList.add("seat")
@@ -61,27 +45,27 @@ const addLoadButton = (saveName) => {
     })
 }
 
-let saveNames = ""
+let classNames = ""
 try {
     if (getCookie("seatingPlans") != "") {
-        saveNames = JSON.parse(getCookie("seatingPlans"))
+        classNames = JSON.parse(getCookie("seatingPlans"))
     }
 } catch (error) {
     console.log("no saves")
 }
 if (getCookie("seatingPlans") != "") {
-    saveNames = JSON.parse(getCookie("seatingPlans"))
+    classNames = JSON.parse(getCookie("seatingPlans"))
 }
-if (saveNames && typeof saveNames === "object" && Object.keys(saveNames).length > 0){
-    saveNames = Object.keys(saveNames)
-    saveNames.forEach(async (name) => {
+if (classNames && typeof classNames === "object" && Object.keys(classNames).length > 0){
+    classNames = Object.keys(classNames)
+    classNames.forEach(async (name) => {
         addLoadButton(name)
     })
 }
 
-for (let i=0; i<9; i++) {
+for (let i=0; i<columns; i++) {
     grid.push([])
-    for (let j=0; j<5; j++) {
+    for (let j=0; j<rows; j++) {
         grid[i].push([null/*itemtype*/ , "placeholder"/*student name*/])
     }
 }
@@ -114,6 +98,7 @@ for (let i=0; i<itemspawners.length; i++) {
     }
     const item = document.createElement("div")
     item.id = "ghost-item"
+    item.style.visibility = "hidden"
     item.style.width = `${gridWidth}vw`;
     item.style.height = `${gridheight}vh`;
     item.style.backgroundColor = itemspawners[i].style.backgroundColor
@@ -130,7 +115,6 @@ drawingArea.addEventListener("click", function(event) {
         const drawingAreaBox = drawingArea.getBoundingClientRect()
         if (grid[Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width)][Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height)] != null) {
             grid[Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width)][Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height)][0] = {color: ghostItem.style.backgroundColor}
-            console.table(grid)
             drawingArea.childNodes.forEach(async (element) => {
                 if (element.style.gridColumnStart == Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width + 1) && element.style.gridRowStart == Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height + 1)) {
                     element.style.backgroundColor = ghostItem.style.backgroundColor
@@ -146,29 +130,33 @@ document.addEventListener("mousemove", function(event) {
     if (ghostItem) {
         const ghostItemBox = ghostItem.getBoundingClientRect()
         const drawingAreaBox = drawingArea.getBoundingClientRect()
-        if (drawingAreaBox.left < event.clientX && event.clientX < drawingAreaBox.right && drawingAreaBox.top < event.clientY && event.clientY < drawingAreaBox.bottom) {
+        if (drawingAreaBox.left < event.clientX && event.clientX < drawingAreaBox.right - 4 && drawingAreaBox.top < event.clientY && event.clientY < drawingAreaBox.bottom) {
+            ghostItem.style.visibility = "visible"
             if (grid[Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width)][Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height)] != null) {
-                ghostItem.style.gridColumnStart = `${Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width)}`
-                ghostItem.style.gridRowStart = `${Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height)}`
-            }
+                ghostItem.style.left = `${2 + window.scrollX + drawingAreaBox.left + Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width)*ghostItemBox.width}px`
+                ghostItem.style.top = `${2 + window.scrollY + drawingAreaBox.top + Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height)*ghostItemBox.height}px`}
+            } else {
+            ghostItem.style.visibility = "hidden"
         }
     }
 })
 
 
 document.getElementById("saveButton").addEventListener("click", function() {
-    const name = prompt("give the classroom a name")
+    const defaultName = getCookie("seatingPlans") == "" ? "" : Object.keys(JSON.parse(getCookie("seatingPlans")))[0];
+    const name = prompt("give the classroom a name", defaultName);
     if (name == null || name.length <= 0) return
 
     console.log(name)
     if (getCookie("seatingPlans") == "") {
-        setCookie("seatingPlans", JSON.stringify({[name]: grid}))
+        setCookie("seatingPlans", JSON.stringify({[name]: {grid: grid, layout: {rows: rows, columns: columns}}}), 365)
     }
     const seatingPlans = JSON.parse(getCookie("seatingPlans"))
-    seatingPlans[name] = grid
-    setCookie("seatingPlans", JSON.stringify(seatingPlans))
+    seatingPlans[name] = {grid: grid, layout: {rows: rows, columns: columns}}
+    setCookie("seatingPlans", JSON.stringify(seatingPlans), 365)
     addLoadButton(name)
     console.log(JSON.parse(getCookie("seatingPlans")))
+    console.table(getCookie("seatingPlans"))
 })
 
 function showSaves() {
