@@ -87,12 +87,20 @@ label,input {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr ;
-    grid-template-areas: ". . . . . . . . ." ". . . . . . . . ." ". . . . . . . . ." ". . . . . . . . .";
+    /* grid-template-areas: ". . . . . . . . ." ". . . . . . . . ." ". . . . . . . . ." ". . . . . . . . ."; */
     background-color: whitesmoke;
     width: 78vw;
     height: 65vh;
     margin: 1.5%;
-    border: gray 2px solid;
+    border: gray 4px solid;
+}
+
+#drawing-area > div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    word-wrap: break-word;
+    overflow: hidden;
 }
 
 .item-spawner {

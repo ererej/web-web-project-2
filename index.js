@@ -3,16 +3,11 @@ const itemspawners = document.getElementsByClassName("item-spawner")
 const drawingArea = document.getElementById("drawing-area")
 let rows = 5
 let columns = 9
-const gridheight = 65/rows
-const gridWidth = 78/columns
+let cellHeight = 65/rows
+let cellWidth = 78/columns
 const grid = []
+let gridEnabled = true
 
-const columnsInput = document.getElementById("columns")
-columnsInput.addEventListener("change", function() {
-    columns = columnsInput.value
-    drawingArea.gridTemplateColumns = `repeat(${columns}, 1fr)`
-    drawingArea.gridTemplateRows = `repeat(${rows}, 1fr)`
-})
 
 const addLoadButton = (saveName) => {
     const dropDown = document.getElementById("saves-dropdown")
@@ -26,23 +21,47 @@ const addLoadButton = (saveName) => {
         const grid = JSON.parse(getCookie("seatingPlans"))[saveName].grid
         rows = JSON.parse(getCookie("seatingPlans"))[saveName].layout.rows
         columns = JSON.parse(getCookie("seatingPlans"))[saveName].layout.columns
-        for (let i=0; i<columns; i++) {
-            for (let j=0; j<rows; j++) {
-                    drawingArea.childNodes.forEach(async (element) => {
-                        if (element.style.gridColumnStart == i+1 && element.style.gridRowStart == j+1) {
-                            if (grid[i][j][0] == null) {
-                                element.style.backgroundColor = "white"
-                                element.innerHTML = ""
-                                return 
-                            }
-                            element.style.backgroundColor = grid[i][j][0].color
-                            element.innerHTML = grid[i][j][1]
-                            element.classList.add("seat")
-                        }
-                    })
+        drawingArea.style.gridTemplateColumns = `repeat(${columns}, 1fr)`
+        drawingArea.style.gridTemplateRows = `repeat(${rows}, 1fr)`
+        document.getElementById("room-name").value = saveName
+        document.getElementById("columns").value = columns
+        document.getElementById("rows").value = rows
+        clearGrid()
+        for (let i=0; i<grid.length; i++) {
+            for (let j=0; j<grid[i].length; j++) {
+                drawingArea.childNodes.forEach(async (element) => {
+                    if (element.style.gridColumnStart == i+1 && element.style.gridRowStart == j+1) {
+                        if (grid[i][j][0] === null) return
+                        element.style.backgroundColor = grid[i][j][0].color
+                        element.innerHTML = grid[i][j][1]
+                        element.classList.add("seat")
+                    }
+                })
             }
         }
     })
+}
+
+
+const clearGrid = () => {
+    drawingArea.innerHTML = ""
+    for (let i=1; i<=columns; i++) {
+        for (let j=1; j<=rows; j++) {
+            const gridItem = document.createElement("div")
+            gridItem.style.gridColumnStart = `${i}`
+            gridItem.style.gridRowStart = `${j}`
+            gridItem.style.backgroundColor = "white"
+            gridItem.style.border = "1px solid grey"
+            gridItem.style.padding = gridItem.style.padding -2
+            drawingArea.appendChild(gridItem)
+        }
+    }
+    for (let i=0; i<columns; i++) {
+        grid.push([])
+        for (let j=0; j<rows; j++) {
+            grid[i].push([null/*itemtype*/ , "placeholder"/*student name*/])
+        }
+    }
 }
 
 let classNames = ""
@@ -63,23 +82,7 @@ if (classNames && typeof classNames === "object" && Object.keys(classNames).leng
     })
 }
 
-for (let i=0; i<columns; i++) {
-    grid.push([])
-    for (let j=0; j<rows; j++) {
-        grid[i].push([null/*itemtype*/ , "placeholder"/*student name*/])
-    }
-}
-
-for (let i=1; i<=columns; i++) {
-    for (let j=1; j<=rows; j++) {
-        const gridItem = document.createElement("div")
-        gridItem.style.gridColumnStart = `${i}`
-        gridItem.style.gridRowStart = `${j}`
-        gridItem.style.backgroundColor = "white"
-        drawingArea.appendChild(gridItem)
-    }
-}
-
+clearGrid()
 class seat {
     constructor(type, width, height, color) {
         this.width = 1
@@ -89,6 +92,42 @@ class seat {
     }
 }
 
+document.getElementById("create-new-room").addEventListener("click", function() {
+    const form = document.getElementById("create-room-form")
+    for (i in form.children) {
+        form.children[i].disabled = false
+    }
+    gridEnabled = false
+    clearGrid()
+})
+
+const columnsInput = document.getElementById("columns")
+columnsInput.addEventListener("change", function() {
+    columns = columnsInput.value
+    drawingArea.style.gridTemplateColumns = `repeat(${columns}, 1fr)`
+    clearGrid()
+    cellWidth = 78/columns
+})
+
+const rowsInput = document.getElementById("rows")
+rowsInput.addEventListener("change", function() {
+    rows = rowsInput.value
+    drawingArea.style.gridTemplateRows = `repeat(${rows}, 1fr)`
+    clearGrid()
+    cellHeight = 65/rows
+})
+
+document.getElementById("create-room").addEventListener("click", function(event) {
+    const formInputs = document.querySelectorAll("#create-room-form > input")
+    if (formInputs[0].value == "" || formInputs[1].value == "" || formInputs[2].value == "") {
+        return
+    }
+    event.preventDefault()
+    formInputs.forEach(input => {
+        input.disabled = true
+    })
+    gridEnabled = true
+})
 
 for (let i=0; i<itemspawners.length; i++) {
     itemspawners[i].addEventListener("click", function() {
@@ -99,8 +138,8 @@ for (let i=0; i<itemspawners.length; i++) {
     const item = document.createElement("div")
     item.id = "ghost-item"
     item.style.visibility = "hidden"
-    item.style.width = `${gridWidth}vw`;
-    item.style.height = `${gridheight}vh`;
+    item.style.width = `${cellWidth}vw`;
+    item.style.height = `${cellHeight}vh`;
     item.style.backgroundColor = itemspawners[i].style.backgroundColor
     item.style.opacity = "0.5"
     item.style.position = "absolute"
@@ -109,6 +148,7 @@ for (let i=0; i<itemspawners.length; i++) {
 }
 
 drawingArea.addEventListener("click", function(event) {
+    if (!gridEnabled) return
     const ghostItem = document.getElementById("ghost-item")
     if (ghostItem) {
         const ghostItemBox = ghostItem.getBoundingClientRect()
@@ -126,6 +166,7 @@ drawingArea.addEventListener("click", function(event) {
 })
 
 document.addEventListener("mousemove", function(event) {
+    if (!gridEnabled) return
     const ghostItem = document.getElementById("ghost-item")
     if (ghostItem) {
         const ghostItemBox = ghostItem.getBoundingClientRect()
@@ -142,21 +183,23 @@ document.addEventListener("mousemove", function(event) {
 })
 
 
-document.getElementById("saveButton").addEventListener("click", function() {
-    const defaultName = getCookie("seatingPlans") == "" ? "" : Object.keys(JSON.parse(getCookie("seatingPlans")))[0];
-    const name = prompt("give the classroom a name", defaultName);
-    if (name == null || name.length <= 0) return
-
-    console.log(name)
-    if (getCookie("seatingPlans") == "") {
+document.getElementById("save-button").addEventListener("click", function() {
+    const name = document.getElementById("room-name").value
+    if (name == "") {
+        return
+    }
+    if (!getCookie("seatingPlans")) {
+        console.log({[name]: {grid: grid, layout: {rows: rows, columns: columns}}})
         setCookie("seatingPlans", JSON.stringify({[name]: {grid: grid, layout: {rows: rows, columns: columns}}}), 365)
     }
+    console.log(getCookie("seatingPlans"))
     const seatingPlans = JSON.parse(getCookie("seatingPlans"))
     seatingPlans[name] = {grid: grid, layout: {rows: rows, columns: columns}}
     setCookie("seatingPlans", JSON.stringify(seatingPlans), 365)
+    document.querySelectorAll(".saves-dropdown-button").forEach(element => {
+        if (element.innerHTML == name) {element.remove()}
+    })
     addLoadButton(name)
-    console.log(JSON.parse(getCookie("seatingPlans")))
-    console.table(getCookie("seatingPlans"))
 })
 
 function showSaves() {
@@ -174,10 +217,7 @@ window.onclick = function(event) {
             var openDropdown = dropdowns[i];
             if (openDropdown.classList.contains('show')) {
                 openDropdown.classList.remove('show');
-                console.log("hiding")
             } 
         }
     }
 }
-
-
