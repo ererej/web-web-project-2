@@ -23,7 +23,7 @@ const fillGrid = (students) => {
                 if (grid[i-1][j-1][1] === "Teachers Desk") {
                     gridItem.innerHTML = grid[i-1][j-1][1]
                 } else if (studentsLeft.length > 0) {
-                    const student = studentsLeft.splice(Math.floor(Math.random() * studentsLeft.length), 1)[0]
+                    const student = studentsLeft.pop()
                     gridItem.innerHTML = student
                     grid[i-1][j-1][1] = student
                 }
@@ -31,13 +31,13 @@ const fillGrid = (students) => {
             drawingArea.appendChild(gridItem)
         }
     }
-    grid = []
-    for (let i=0; i<columns; i++) {
-        grid.push([])
-        for (let j=0; j<rows; j++) {
-            grid[i].push([null/*itemtype*/ , "placeholder"/*student name*/])
-        }
-    }
+    //grid = []
+    // for (let i=0; i<columns; i++) {
+    //     grid.push([])
+    //     for (let j=0; j<rows; j++) {
+    //         grid[i].push([null/*itemtype*/ , "placeholder"/*student name*/])
+    //     }
+    // }
 }
 
 
@@ -82,7 +82,8 @@ const addSeatingLoadButton = (saveName) => {
         drawingArea.style.gridTemplateColumns = `repeat(${columns}, 1fr)`
         drawingArea.style.gridTemplateRows = `repeat(${rows}, 1fr)`
         grid = JSON.parse(getCookie("seatings"))[saveName]["grid"]
-        fillGrid([])
+        console.log(grid)
+        fillGrid(JSON.parse(getCookie("classes"))[className])
     })
 }
 
@@ -142,7 +143,9 @@ document.getElementById("create-seating").addEventListener("click", (event) => {
     drawingArea.style.gridTemplateColumns = `repeat(${columns}, 1fr)`
     drawingArea.style.gridTemplateRows = `repeat(${rows}, 1fr)`
     grid = JSON.parse(getCookie("rooms"))[roomName]["grid"]
+    console.log(grid[0][0][1])
     fillGrid(JSON.parse(getCookie("classes"))[className])
+    console.log(grid[0][0][1])
     let seatings = {}
     try {
         if (getCookie("seatings") != "") {

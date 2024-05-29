@@ -5,10 +5,11 @@ body {
     font-style: normal;
 }
 
-body::-webkit-scrollbar {
+/* Hides the ugly built in scrollbar */
+body::-webkit-scrollbar { /* might not work in all bowsers */
     display: none;
-  }
-  
+}
+ 
 :root {
     --green: #00ff00;
     --darker-green: #aaff00;
@@ -94,10 +95,12 @@ main {
 footer {
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
     align-items: center;
     background-color: var(--darker-blue);
     height: fit-content;
     width: 100%;
+    color: var(--white);
 }
 
 footer > h2 {
@@ -128,8 +131,8 @@ tfoot {
 
 #drawing-area {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
-    grid-template-rows: 1fr 1fr 1fr 1fr 1fr ;
+    grid-template-columns: repeat(9, 1fr);
+    grid-template-rows: repeat(5, 1fr) ;
     width: 78vw;
     height: 65vh;
     margin: 1.5%;
@@ -176,7 +179,7 @@ tfoot {
     background-color: var(--green);
     width: 20vh;
     max-width: 100%;
-    height: 5vh;
+    height: fit-content;
     text-align: center;
     padding: 10px;
     margin: 10px;
@@ -259,7 +262,7 @@ tfoot {
     }
     #drawing-area {
         width: 95%;
-        margin: inherit 5%;
+        margin: 0;
     }
     #saved-classes-container {
         display: none;
