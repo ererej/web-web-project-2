@@ -8,37 +8,80 @@
 </head>
 <body>
     <header>
-        <div class="navbar">
+        <nav>
+            <img src="./images/seating_planner_logo.png" alt="Page Logo" id="logo" loading="lazy">
             <a href="index.html" class="navbar-button"><div>Saved Rooms</div></a>
-            <a href="#" class="navbar-button"><div>Saved Seating Plans</div></a>
+            <a href="seating_plans.html" class="navbar-button"><div>Saved Seating Plans</div></a>
             <a href="classes.html" class="navbar-button"><div>Saved Classes</div> </a>
-        </div>
+        </nav>
         <div class="line"></div>
     </header> 
+    <aside class="rounded">
+        <button class="buttons" id="create-new-room">New Room</button>
+        <div class="item-spawner rounded" id="student-seat">Seat</div>
+        <div class="item-spawner rounded" id="teacher-desk">Teachers Desk</div>
+        <button onclick="showSaves()" id="loadButton" class="buttons">Load Seatings</button>
+        <div id="saves-dropdown" class="saves-dropdown-content"></div>
+        <button id="save-button" class="buttons">Save</button>
+    </aside>
     <main>
-        <div id="item-picker">
-            <button class="buttons" id="create-new-room">New Room</button>
-            <div class="item-spawner" id="test-item" style="background-color: red;">Seat</div>
-            <div class="item-spawner" id="test-item2" style="background-color: blue;">Teachers desc</div>
-            <button onclick="showSaves()" id="loadButton" class="buttons">Load Seatings</button>
-            <div id="saves-dropdown" class="saves-dropdown-content"></div>
-            <button id="save-button" class="buttons">Save</button>
-        </div>
-        <div id="right-side">
-                <form id="create-room-form">
-                    <label for="room-name">Room Name:</label>
-                    <input type="text" id="room-name" required="true" disabled="true">
-                    <label for="columns">Colums:</label>
-                    <input id="columns" type="number" min="1" max="100" value="9" step="1" required="true" disabled="true">
-                    <label for="rows">Rows:</label>
-                    <input id="rows" type="number" min="1" max="100" value="5" step="1" required="true" disabled="true">
-                    <button id="create-room" type="submit" class="buttons" disabled>Create</button>
-                </form>
+        <form id="create-room-form">
+            <label for="room-name">Room Name:</label>
+            <input type="text" id="room-name" required disabled>
+            <label for="columns">Colums:</label>
+            <input id="columns" type="number" min="2" max="100" value="9" step="1" required disabled>
+            <label for="rows">Rows:</label>
+            <input id="rows" type="number" min="2" max="100" value="5" step="1" required disabled>
+            <button id="create-room" type="submit" class="buttons" disabled>Create</button>
+        </form>
         <div id="drawing-area"></div>
-    </div>
     </main>
-    <footer></footer>
+    <footer>
+        <h2>Lorem ipsum!</h2>
+        <form>
+            <label for="email">Ipsum!</label>
+            <input type="email" id="email" placeholder="Email">
+            <label for="subject">Lorem!</label>
+            <input type="text" id="subject" placeholder="subject">
+            <label for="message">Ipsum!</label>
+            <textarea id="message" placeholder="Message"></textarea>
+            <input type="submit" value="Submit">
+        </form>
+        <table>
+            <thead>
+                <tr>
+                    <th>Ipsum</th>
+                    <th>Ipsum</th>
+                    <th>Ipsum</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Ipsum</td>
+                    <td>Ipsum</td>
+                    <td>Ipsum</td>
+                </tr>
+                <tr>
+                    <td>Ipsum</td>
+                    <td>Ipsum</td>
+                    <td>Ipsum</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>Ipsum</td>
+                    <td>Ipsum</td>
+                    <td>Ipsum</td>
+                </tr>
+            </tfoot>
+        </table>
+        <ul>
+            <li>Hej</li>
+            <li>på</li>
+            <li>dig!</li>
+        </ul>
+    </footer>
 </body>
-<script src="cookies.js"></script>
-<script src="index.js"></script>
+<script src="./scripts/cookies.js"></script>
+<script src="./scripts/index.js"></script>
 </html>

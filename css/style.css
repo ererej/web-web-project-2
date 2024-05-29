@@ -1,5 +1,8 @@
 body {
     margin: 0;
+    background-image: url("../images/background.png");
+    font-family: "Edu TAS Beginner", cursive;
+    font-style: normal;
 }
 
 body::-webkit-scrollbar {
@@ -7,8 +10,14 @@ body::-webkit-scrollbar {
   }
   
 :root {
-    --light-blue: #328eff;
-    --darker-blue: #0e5eff;
+    --green: #00ff00;
+    --darker-green: #aaff00;
+    --blue: #009efa;
+    --darker-blue: #013a5c;
+    --orange: #ffbb00;
+    --black: #000;
+    --red-orange: #ff4000;
+    --white: #f5f5f5;
 }
 
 a {
@@ -16,13 +25,17 @@ a {
     font-weight: bold;
 }
 
-#navbar-logo {
-    height: 5%;
-    aspect-ratio: 1/1;
+.rounded {
+    border-radius: 10px;
+}
+
+#logo {
+    border-radius: 100%;
+    height: 70px;
 }
 
 
-.navbar {
+nav {
     display: flex;
     padding: 13px 0 3px;
     margin: 0 10%;
@@ -36,62 +49,91 @@ a {
     padding: 10px 50px;
     transition-property: background-color;
     transition-duration: 0.25s;
-    background-color: var(--light-blue);
+    background-color: var(--green);
+    border-radius: 10px 50%;
 } 
-#active-page {
-    background-color: var(--darker-blue);
-}
-
 
 .navbar-button:hover {
-    background-color: var(--darker-blue);
+    background-color: var(--darker-green);
 }
-
 
 .line {
     width: 90%;
     height: 5px;
-    background-color: #000;
+    background-color: var(--black);
     margin: 2.5% 5%;
     border-radius: 2.5px;
 }
 
 
-#item-picker {
+aside {
     display: inline-flex;
-    background-color: #009efa;
+    background-color: var(--blue);
     width: 12vw;
     height: 80vh;
-    margin: 2%;
     justify-content: space-around;
     align-items: center;
     flex-direction: column;
-    overflow-y: hidden;
+    overflow: hidden;
 }
 
-#right-side {
+aside > * {
+    margin: 0;
+}
+
+main {
     display: inline-flex;
+    vertical-align: top;
     width: 78vw;
     height: 80vh;
-    margin: 2%;
-    align-items: left;
+    align-items: flex-start;
     flex-direction: column;
+    margin-left: 2%;
 }
 
-label,input {
-    width: 10%;
-    display: inline;
+footer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--darker-blue);
+    height: fit-content;
+    width: 100%;
+}
+
+footer > h2 {
+    margin: auto 3%;
+}
+footer > input {
+    margin-top: 10px;
+}
+
+thead {
+    width: 100%;
+    color: var(--green);
+}
+
+tbody > tr:first-child {
+    color: var(--darker-green);
+}
+
+tbody > tr:last-child {
+    color: var(--red-orange);
+}
+
+tfoot {
+    color: var(--blue);
+    text-decoration: underline overline line-through wavy var(--orange);
+
 }
 
 #drawing-area {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr;
     grid-template-rows: 1fr 1fr 1fr 1fr 1fr ;
-    /* grid-template-areas: ". . . . . . . . ." ". . . . . . . . ." ". . . . . . . . ." ". . . . . . . . ."; */
-    background-color: whitesmoke;
     width: 78vw;
     height: 65vh;
     margin: 1.5%;
+    background-color: var(--white);
     border: gray 4px solid;
 }
 
@@ -104,35 +146,50 @@ label,input {
 }
 
 .item-spawner {
-    display: inline-flex;
-    background-color: #fa0000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 10vh;
     height: 10vh;
     cursor: pointer;
 }
 
-.ghost-item {
-    display: absolute;
+#student-seat {
+    background-color: var(--orange);
 }
 
-.seat {
-    text-align: center;
-    padding: 20% 0;
+#teacher-desk {
+    background-color: var(--red-orange);
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+    
 }
 
 .buttons {
-    background-color: #00ff00;
+    background-color: var(--green);
     width: 20vh;
+    max-width: 100%;
     height: 5vh;
     text-align: center;
     padding: 10px;
     margin: 10px;
     border-radius: 5px;
     cursor: pointer;
+    box-shadow: black 2px 2px;
+    animation-name: fadeIn;
+    animation-timing-function: ease-in;
+    animation-duration: 1s;
 }
 
 .buttons:hover {
-    background-color: #2fff00;
+    background-color: var(--darker-green);
 }
 
 .saves-dropdown {
@@ -143,8 +200,8 @@ label,input {
 .saves-dropdown-content {
     display: none;
     position: static;
-    background-color: #e40303;
-    border: 1px solid #000;
+    background-color: var(--darker-green);
+    border: 1px solid var(--black);
     min-width: 100px;
     min-height: 30px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
@@ -160,28 +217,51 @@ label,input {
     display: inline-flex;
     flex-direction: column;
     background-color: #009efa;
-    /* width: 20vh; */
     height: 75vh;
     margin: 0 7%;
-    cursor: pointer;
 }
 
-#create-class-form-conatiner {
-    background-color: red;
+#create-class-form {
+    background-color: var(--blue);
     display: inline-flex;
     flex-direction: column;
-    width: 50%;
+    width: 100%;
     height: 100%;
     overflow-y: auto;
-    align-items: left;
+    align-items: start;
 }
 
 #create-class-form > * {
-    margin: 10px;
-    ;
+    margin: 1%;
+    max-width: 97%;
 }
 
 #delete-class {
     background-color: #fa0000;
     display: none;
+}
+
+
+@media screen and (max-width: 1000px) {
+    nav {
+        margin: 0;
+        flex-wrap: wrap;
+    }
+    aside {
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        flex-wrap: wrap;
+        height: fit-content;
+    }
+    main {
+        width: 100%;
+    }
+    #drawing-area {
+        width: 95%;
+        margin: inherit 5%;
+    }
+    #saved-classes-container {
+        display: none;
+    }
 }

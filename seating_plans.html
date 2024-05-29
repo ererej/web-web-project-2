@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project 2</title>
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+<body>
+    <header>
+        <nav>
+            <img src="./images/seating_planner_logo.png" alt="Page Logo" id="logo" loading="lazy">
+            <a href="index.html" class="navbar-button"><div>Saved Rooms</div></a>
+            <a href="seating_plans.html" class="navbar-button"><div>Saved Seating Plans</div></a>
+            <a href="classes.html" class="navbar-button"><div>Saved Classes</div> </a>
+        </nav>
+        <div class="line"></div>
+    </header> 
+    <aside class="rounded">
+        <button class="buttons" id="create-new-seating">New Seating Plan</button>
+        <button onclick="showSaves()" id="loadButton" class="buttons">Load Seatings</button>
+        <div id="saves-dropdown" class="saves-dropdown-content"></div>
+        <button id="save-button" class="buttons">Save</button>
+    </aside>
+    <main>
+        <form id="create-seating-form">
+            <label for="seating-name">Room Name:</label>
+            <input type="text" id="seating-name" required disabled>
+            <label for="room">Room</label>
+            <select id="room" required disabled>
+                <option value="">None</option>
+            </select>
+            <label for="class">Class</label>
+            <select id="class" required disabled>
+                <option value="">None</option>
+            </select>
+            <button id="create-seating" type="submit" class="buttons" disabled>Create</button>
+        </form>
+        <div id="drawing-area"></div>
+    </main>
+    <footer></footer>
+</body>
+<script src="./scripts/cookies.js"></script>
+<script src="./scripts/seating_plans.js"></script>
+</html>

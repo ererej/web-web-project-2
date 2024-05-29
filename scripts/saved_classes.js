@@ -2,7 +2,7 @@ const loadButtonsContainer = document.getElementById("saved-classes")
 
 
 const addClassLoadButton = (saveName) => {
-    const savedClassesContainer = document.getElementById("saved-classes-container")
+    const savedClassesContainer = document.querySelector("aside")
     const classButton = document.createElement("button")
     classButton.classList.add("buttons")
     classButton.innerHTML = saveName 
@@ -11,7 +11,7 @@ const addClassLoadButton = (saveName) => {
         document.getElementById("students").value = JSON.parse(getCookie("classes"))[saveName].join(",")
         document.getElementById("class-name").value = saveName
         document.getElementById("class-name").readOnly = true
-        document.getElementById("delete-class").style.display = "inline-block"
+        document.getElementById("delete-class").style.display = "block"
     })
 }
 
@@ -56,20 +56,21 @@ deleteClassButton.addEventListener("click", () => {
     document.querySelector(`button[innerHTML="${className}"]`).remove();
 })
 
-document.getElementById("create-class-form").addEventListener("submit", function (e) {
+document.getElementById("save-class").addEventListener("click", function (e) {
+    const className = document.getElementById("class-name").value
+    const students = document.getElementById("students").value.split(/[\n,]+/).map(name => name.trim());
+    if (className == "" || students.length == 0) {
+        return
+    }
     e.preventDefault();
-  
-    var formData = new FormData(this); // Fix: Use 'this' instead of 'form'
-    // output as an object
     let savedClasses = {}
     if (getCookie("classes") != "") {
         savedClasses = JSON.parse(getCookie("classes"))
     }
-    if (!savedClasses[Object.fromEntries(formData)["class-name"]]) {
-        addClassLoadButton(Object.fromEntries(formData)["class-name"])
+    if (!getCookie("classes") || !JSON.parse(getCookie("classes"))[className]) {
+        addClassLoadButton(className)
     }
-    savedClasses[Object.fromEntries(formData)["class-name"]] = Object.fromEntries(formData).students.split(/[\n,]+/).map(name => name.trim());
+    savedClasses[className] = students;
     setCookie("classes", JSON.stringify(savedClasses), 365)
-    console.log(JSON.parse(getCookie("classes")))
-    const className = Object.fromEntries(formData)["class-name"];
+    document.getElementById("delete-class").style.display = "block"
 });

@@ -1,11 +1,10 @@
-let life = 52;
 const itemspawners = document.getElementsByClassName("item-spawner")
 const drawingArea = document.getElementById("drawing-area")
 let rows = 5
 let columns = 9
 let cellHeight = 65/rows
 let cellWidth = 78/columns
-const grid = []
+let grid = []
 let gridEnabled = true
 
 
@@ -18,9 +17,11 @@ const addLoadButton = (saveName) => {
     element.innerHTML = saveName
     dropDown.appendChild(element)
     element.addEventListener("click", function() {
-        const grid = JSON.parse(getCookie("seatingPlans"))[saveName].grid
-        rows = JSON.parse(getCookie("seatingPlans"))[saveName].layout.rows
-        columns = JSON.parse(getCookie("seatingPlans"))[saveName].layout.columns
+        const grid = JSON.parse(getCookie("rooms"))[saveName].grid
+        rows = JSON.parse(getCookie("rooms"))[saveName].layout.rows
+        columns = JSON.parse(getCookie("rooms"))[saveName].layout.columns
+        cellHeight = 65/rows
+        cellWidth = 78/columns
         drawingArea.style.gridTemplateColumns = `repeat(${columns}, 1fr)`
         drawingArea.style.gridTemplateRows = `repeat(${rows}, 1fr)`
         document.getElementById("room-name").value = saveName
@@ -31,10 +32,12 @@ const addLoadButton = (saveName) => {
             for (let j=0; j<grid[i].length; j++) {
                 drawingArea.childNodes.forEach(async (element) => {
                     if (element.style.gridColumnStart == i+1 && element.style.gridRowStart == j+1) {
+                        element.classList.remove("rounded")
                         if (grid[i][j][0] === null) return
                         element.style.backgroundColor = grid[i][j][0].color
                         element.innerHTML = grid[i][j][1]
-                        element.classList.add("seat")
+                        element.classList.add("rounded")
+
                     }
                 })
             }
@@ -52,10 +55,11 @@ const clearGrid = () => {
             gridItem.style.gridRowStart = `${j}`
             gridItem.style.backgroundColor = "white"
             gridItem.style.border = "1px solid grey"
-            gridItem.style.padding = gridItem.style.padding -2
+            gridItem.style.padding = window.getComputedStyle(gridItem).padding -2
             drawingArea.appendChild(gridItem)
         }
     }
+    grid = []
     for (let i=0; i<columns; i++) {
         grid.push([])
         for (let j=0; j<rows; j++) {
@@ -66,14 +70,12 @@ const clearGrid = () => {
 
 let classNames = ""
 try {
-    if (getCookie("seatingPlans") != "") {
-        classNames = JSON.parse(getCookie("seatingPlans"))
+    if (getCookie("rooms") != "") {
+        classNames = JSON.parse(getCookie("rooms"))
     }
-} catch (error) {
-    console.log("no saves")
-}
-if (getCookie("seatingPlans") != "") {
-    classNames = JSON.parse(getCookie("seatingPlans"))
+} catch (error) {}
+if (getCookie("rooms") != "") {
+    classNames = JSON.parse(getCookie("rooms"))
 }
 if (classNames && typeof classNames === "object" && Object.keys(classNames).length > 0){
     classNames = Object.keys(classNames)
@@ -83,35 +85,28 @@ if (classNames && typeof classNames === "object" && Object.keys(classNames).leng
 }
 
 clearGrid()
-class seat {
-    constructor(type, width, height, color) {
-        this.width = 1
-        this.height = 1
-        this.color = color
-        this.type = type
-    }
-}
 
-document.getElementById("create-new-room").addEventListener("click", function() {
+document.getElementById("create-new-room").addEventListener("click", function() {// enables the form to create a new room
     const form = document.getElementById("create-room-form")
     for (i in form.children) {
         form.children[i].disabled = false
     }
+    document.getElementById("room-name").focus()
     gridEnabled = false
     clearGrid()
 })
 
 const columnsInput = document.getElementById("columns")
-columnsInput.addEventListener("change", function() {
-    columns = columnsInput.value
+columnsInput.addEventListener("change", function() {// updates the number of columns in the grid when the user changes the input
+    columns = parseInt(columnsInput.value)
     drawingArea.style.gridTemplateColumns = `repeat(${columns}, 1fr)`
     clearGrid()
     cellWidth = 78/columns
 })
 
 const rowsInput = document.getElementById("rows")
-rowsInput.addEventListener("change", function() {
-    rows = rowsInput.value
+rowsInput.addEventListener("change", function() {// updates the number of rows in the grid when the user changes the input
+    rows = parseInt(rowsInput.value)
     drawingArea.style.gridTemplateRows = `repeat(${rows}, 1fr)`
     clearGrid()
     cellHeight = 65/rows
@@ -119,7 +114,7 @@ rowsInput.addEventListener("change", function() {
 
 document.getElementById("create-room").addEventListener("click", function(event) {
     const formInputs = document.querySelectorAll("#create-room-form > input")
-    if (formInputs[0].value == "" || formInputs[1].value == "" || formInputs[2].value == "") {
+    if (formInputs[0].value == "" || formInputs[1].value == "" || formInputs[2].value == "") {//checks if any of the inputs are empty
         return
     }
     event.preventDefault()
@@ -129,22 +124,25 @@ document.getElementById("create-room").addEventListener("click", function(event)
     gridEnabled = true
 })
 
+//attatches event listeners to all itemspawners
 for (let i=0; i<itemspawners.length; i++) {
-    itemspawners[i].addEventListener("click", function() {
-    document.getElementById("ghost-item")
-    if (document.getElementById("ghost-item")) {
-      document.getElementById("ghost-item").remove()
-    }
-    const item = document.createElement("div")
-    item.id = "ghost-item"
-    item.style.visibility = "hidden"
-    item.style.width = `${cellWidth}vw`;
-    item.style.height = `${cellHeight}vh`;
-    item.style.backgroundColor = itemspawners[i].style.backgroundColor
-    item.style.opacity = "0.5"
-    item.style.position = "absolute"
-    document.getElementById("drawing-area").appendChild(item)
-  })
+    itemspawners[i].addEventListener("click", function(event) {
+        document.getElementById("ghost-item")
+        if (document.getElementById("ghost-item")) {
+            document.getElementById("ghost-item").remove()
+        }
+        const item = document.createElement("div")
+        item.id = "ghost-item"
+        item.innerHTML = event.target.innerHTML
+        item.style.visibility = "hidden"
+        item.style.width = `${cellWidth}vw`;
+        item.style.height = `${cellHeight}vh`;
+        item.style.backgroundColor = window.getComputedStyle(event.target).backgroundColor
+        item.style.opacity = "0.5"
+        item.style.position = "absolute"
+        item.classList.add("rounded")
+        document.getElementById("drawing-area").appendChild(item)
+    })
 }
 
 drawingArea.addEventListener("click", function(event) {
@@ -155,10 +153,12 @@ drawingArea.addEventListener("click", function(event) {
         const drawingAreaBox = drawingArea.getBoundingClientRect()
         if (grid[Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width)][Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height)] != null) {
             grid[Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width)][Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height)][0] = {color: ghostItem.style.backgroundColor}
+            grid[Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width)][Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height)][1] = ghostItem.innerHTML
             drawingArea.childNodes.forEach(async (element) => {
                 if (element.style.gridColumnStart == Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width + 1) && element.style.gridRowStart == Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height + 1)) {
                     element.style.backgroundColor = ghostItem.style.backgroundColor
                     element.innerHTML = ghostItem.innerHTML
+                    element.classList.add("rounded")
                 }
             })
         }        
@@ -174,8 +174,8 @@ document.addEventListener("mousemove", function(event) {
         if (drawingAreaBox.left < event.clientX && event.clientX < drawingAreaBox.right - 4 && drawingAreaBox.top < event.clientY && event.clientY < drawingAreaBox.bottom) {
             ghostItem.style.visibility = "visible"
             if (grid[Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width)][Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height)] != null) {
-                ghostItem.style.left = `${2 + window.scrollX + drawingAreaBox.left + Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width)*ghostItemBox.width}px`
-                ghostItem.style.top = `${2 + window.scrollY + drawingAreaBox.top + Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height)*ghostItemBox.height}px`}
+                ghostItem.style.left = `${4 + window.scrollX + drawingAreaBox.left + Math.floor((event.clientX-drawingAreaBox.left)/ghostItemBox.width)*ghostItemBox.width}px`
+                ghostItem.style.top = `${4 + window.scrollY + drawingAreaBox.top + Math.floor((event.clientY-drawingAreaBox.top)/ghostItemBox.height)*ghostItemBox.height}px`}
             } else {
             ghostItem.style.visibility = "hidden"
         }
@@ -188,14 +188,12 @@ document.getElementById("save-button").addEventListener("click", function() {
     if (name == "") {
         return
     }
-    if (!getCookie("seatingPlans")) {
-        console.log({[name]: {grid: grid, layout: {rows: rows, columns: columns}}})
-        setCookie("seatingPlans", JSON.stringify({[name]: {grid: grid, layout: {rows: rows, columns: columns}}}), 365)
+    if (!getCookie("rooms")) {
+        setCookie("rooms", JSON.stringify({[name]: {grid: grid, layout: {rows: rows, columns: columns}}}), 365)
     }
-    console.log(getCookie("seatingPlans"))
-    const seatingPlans = JSON.parse(getCookie("seatingPlans"))
+    const seatingPlans = JSON.parse(getCookie("rooms"))
     seatingPlans[name] = {grid: grid, layout: {rows: rows, columns: columns}}
-    setCookie("seatingPlans", JSON.stringify(seatingPlans), 365)
+    setCookie("rooms", JSON.stringify(seatingPlans), 365)
     document.querySelectorAll(".saves-dropdown-button").forEach(element => {
         if (element.innerHTML == name) {element.remove()}
     })
